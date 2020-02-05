@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/md_green_50"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Sort by "
+        android:textAllCaps="true"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/rgSort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="middle">
+
+        <RadioButton
+            android:id="@+id/rbMostViewed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:button="@null"
+            android:checked="true"
+            android:drawableEnd="@android:drawable/btn_radio"
+            android:gravity="left|center"
+            android:paddingStart="10dp"
+            android:text="Most Viewed Products"
+            android:textSize="16sp"
+            tools:ignore="RtlHardcoded"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:paddingLeft="10dp" />
+
+        <RadioButton
+            android:id="@+id/rbMostOrdered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:button="@null"
+            android:drawableEnd="@android:drawable/btn_radio"
+            android:gravity="left|center"
+            android:paddingStart="10dp"
+            android:text="Most Ordered Products"
+            android:textSize="16sp"
+            tools:ignore="RtlHardcoded"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:paddingLeft="10dp" />
+
+        <RadioButton
+            android:id="@+id/rbMostShared"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:button="@null"
+            android:drawableEnd="@android:drawable/btn_radio"
+            android:gravity="left|center"
+            android:paddingStart="10dp"
+            android:text="Most Shared Products"
+            android:textSize="16sp"
+            tools:ignore="RtlHardcoded"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:paddingLeft="10dp" />
+
+    </RadioGroup>
+
+</LinearLayout>
