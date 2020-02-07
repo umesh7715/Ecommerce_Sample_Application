@@ -12,12 +12,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.andromesh.ecommercesassesment.R;
 import com.andromesh.ecommercesassesment.adapters.CategoryAdapterV2;
 import com.andromesh.ecommercesassesment.adapters.ProductsAdapter;
+import com.andromesh.ecommercesassesment.bindingUtils.interfaceCallback.ExecutorCallbackForProduct;
 import com.andromesh.ecommercesassesment.database.entity.ecommerce.Category;
 import com.andromesh.ecommercesassesment.database.entity.ecommerce.Product;
+import com.andromesh.ecommercesassesment.database.entity.ecommerce.RankingProduct;
 import com.andromesh.ecommercesassesment.networkBoundResource.Resource;
 import com.andromesh.ecommercesassesment.utils.Constants;
 import com.andromesh.ecommercesassesment.utils.Constants.SortTypes;
@@ -31,14 +41,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -293,14 +295,35 @@ public class ECommerceFragments extends Fragment {
         products.clear();
         productAdapter = new ProductsAdapter(getActivity(), products, viewModel, product -> {
             try {
-                ProductDetailFragment fragment = new ProductDetailFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Constants.VARIANTS, product);
-                fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, fragment, null)
-                        .addToBackStack("product")
-                        .commit();
+
+                viewModel.getRankingProduct(product.getId(), new ExecutorCallbackForProduct() {
+                    @Override
+                    public void fromDiskIO(RankingProduct productRanking) {
+
+                        ProductDetailFragment fragment = new ProductDetailFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(Constants.PRODUCT, product);
+                        bundle.putParcelable(Constants.RANKING_PRODUCT, productRanking);
+                        fragment.setArguments(bundle);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, fragment, null)
+                                .addToBackStack("product")
+                                .commit();
+
+                    }
+
+                    @Override
+                    public void fromNetwork() {
+
+                    }
+
+                    @Override
+                    public void fromMain() {
+
+                    }
+                });
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

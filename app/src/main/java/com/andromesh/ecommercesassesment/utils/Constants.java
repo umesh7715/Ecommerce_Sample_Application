@@ -2,7 +2,9 @@ package com.andromesh.ecommercesassesment.utils;
 
 public class Constants {
 
-    public static String VARIANTS = "variants";
+    public static String PRODUCT = "product";
+    public static String RANKING_PRODUCT = "ranking_product";
+
 
     public interface SortTypes {
         String MOST_VIEWED = "viewCount";

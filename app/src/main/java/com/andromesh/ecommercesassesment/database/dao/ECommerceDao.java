@@ -1,18 +1,19 @@
 package com.andromesh.ecommercesassesment.database.dao;
 
 
-import com.andromesh.ecommercesassesment.database.entity.ecommerce.Category;
-import com.andromesh.ecommercesassesment.database.entity.ecommerce.Product;
-import com.andromesh.ecommercesassesment.database.entity.ecommerce.RankingProduct;
-
-import java.util.List;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.RoomWarnings;
+import androidx.room.Update;
+
+import com.andromesh.ecommercesassesment.database.entity.ecommerce.Category;
+import com.andromesh.ecommercesassesment.database.entity.ecommerce.Product;
+import com.andromesh.ecommercesassesment.database.entity.ecommerce.RankingProduct;
+
+import java.util.List;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -56,6 +57,12 @@ public interface ECommerceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertRankingProducts(RankingProduct rankingProduct);
 
+    @Query("SELECT * FROM RankingProduct where id = :productId")
+    RankingProduct getProductRanking(int productId);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void inertProduct(Product product);
+
+    @Update
+    void updateProductRanking(RankingProduct tempRankingProduct);
 }

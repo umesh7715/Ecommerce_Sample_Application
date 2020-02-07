@@ -1,6 +1,11 @@
 package com.andromesh.ecommercesassesment.repositories;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+
 import com.andromesh.ecommercesassesment.api.ECommerceServiceAPI;
+import com.andromesh.ecommercesassesment.bindingUtils.interfaceCallback.ExecutorCallbackForProduct;
 import com.andromesh.ecommercesassesment.database.dao.ECommerceDao;
 import com.andromesh.ecommercesassesment.database.entity.ecommerce.Category;
 import com.andromesh.ecommercesassesment.database.entity.ecommerce.ECommerceResponse;
@@ -19,10 +24,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
 
 public class ECommerceServiceRepository {
 
@@ -60,7 +61,25 @@ public class ECommerceServiceRepository {
 
                 for (Ranking ranking : item.getRankings()) {
                     for (RankingProduct rankingProduct : ranking.getRankingProducts()) {
-                        eCommerceDao.insertRankingProducts(rankingProduct);
+
+                        RankingProduct tempRankingProduct = eCommerceDao.getProductRanking(rankingProduct.getId());
+
+                        if (null == tempRankingProduct) {
+                            eCommerceDao.insertRankingProducts(rankingProduct);
+                        } else {
+
+                            if (null != rankingProduct.getViewCount()) {
+                                tempRankingProduct.setViewCount(rankingProduct.getViewCount());
+                            } else if (null != rankingProduct.getOrderCount()) {
+                                tempRankingProduct.setOrderCount(rankingProduct.getOrderCount());
+                            } else if (null != rankingProduct.getShares()) {
+                                tempRankingProduct.setShares(rankingProduct.getShares());
+                            }
+
+                            eCommerceDao.updateProductRanking(tempRankingProduct);
+
+                        }
+
                     }
                 }
 
@@ -145,4 +164,12 @@ public class ECommerceServiceRepository {
     }
 
 
+    public void getProduct(Integer id, ExecutorCallbackForProduct executorCallback) {
+
+
+        executor.diskIO().execute(() -> {
+            executorCallback.fromDiskIO(eCommerceDao.getProductRanking(id));
+        });
+
+    }
 }
